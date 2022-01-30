@@ -160,5 +160,12 @@ Button(menuBar,text="File",command=file,bg=menubgcolour,fg=fgColour,relief=FLAT)
 # Help Button
 Button(menuBar,text="Help",command=help,bg=menubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
 
+'''---------    Menubar Done    ------- '''
+
+'''Text'''
+textFrame=Frame(root)
+text=Text(textFrame,fg=fgColour,bg=rootbgcolour,insertbackground=fgColour) #insertbackgorund: cursor colour
+text.pack(side=TOP,fill=BOTH,expand=True)
+textFrame.pack(side=BOTTOM,fill=BOTH,expand=True)
 
 root.mainloop()
