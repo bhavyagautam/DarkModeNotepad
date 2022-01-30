@@ -1,5 +1,7 @@
 from tkinter import *
+from tkinter import filedialog
 import tkinter.messagebox as msgbox
+import os
 root=Tk()
 root.geometry(f"800x600+100+100")
 root.minsize(200,200)
@@ -122,18 +124,47 @@ def file():
     
     Button(fileMenu,text="New",command=new,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
     Button(fileMenu,text="Save",command=save,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
-    Button(fileMenu,text="Open",command=open,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
+    Button(fileMenu,text="Open",command=openFunction,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
     
-    Button(fileMenu,text="X",command=fileMenu.pack_forget,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=RIGHT,pady=2) #To close the extra menu
+    Button(fileMenu,text="X",command=fileMenu.pack_forget,bg=submenubgcolour,fg=fgColour,relief=FLAT,width=3).pack(side=RIGHT,pady=2,padx=2) #To close the extra menu
 #Sub functions
-def save():
-    pass
+# To raw function to open the files with absolute path
+def to_raw(string):
+    newstr=''
+    for val in string:
+        if(val=='\\'):
+            newstr+='\\'
+            newstr+=val
+        else:
+            newstr+=val
+    return str(newstr)
 
-def open():
-    pass
+#Function to delete all contents of the textbox
+def textDelete():
+    text.delete(1.0,"end")
+
+#Function to save the file
+def save():
+    filename=filedialog.askopenfilename(initialdir=os.getcwd(),title="Save",filetypes=(('Text Files','*.txt*'),("All Files", "*.*")))
+    raw_filename=to_raw(filename)
+    val=getText()
+    with open(raw_filename,'w') as f:
+        f.write(val)
+
+
+# Function to open files
+def openFunction():
+    filename=filedialog.askopenfilename(initialdir=os.getcwd(),title="Open",filetypes=(('Text Files','*.txt*'),("All Files", "*.*")))
+    raw_filename=to_raw(filename)
+    with open(raw_filename,'r') as f:
+        val=f.read()
+    textDelete()
+    addText(val)
+
+
 
 def new():
-    pass
+    textDelete()
 
 # Help menu functions
 def help():
@@ -142,7 +173,7 @@ def help():
 
     Button(helpMenu,text="About",command=about,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
 
-    Button(helpMenu,text="X",command=helpMenu.pack_forget,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=RIGHT,pady=2) #To close the extra menu
+    Button(helpMenu,text="X",command=helpMenu.pack_forget,bg=submenubgcolour,fg=fgColour,relief=FLAT,width=3).pack(side=RIGHT,pady=2,padx=2) #To close the extra menu
 
 #Sub functions
 def about():
@@ -167,5 +198,14 @@ textFrame=Frame(root)
 text=Text(textFrame,fg=fgColour,bg=rootbgcolour,insertbackground=fgColour) #insertbackgorund: cursor colour
 text.pack(side=TOP,fill=BOTH,expand=True)
 textFrame.pack(side=BOTTOM,fill=BOTH,expand=True)
+
+#Functions to easily manipulate data inside textbox
+def getText():
+    return text.get(1.0,'end-1c')
+
+def addText(val):
+    text.insert(END,val)
+
+
 
 root.mainloop()
