@@ -1,16 +1,19 @@
 from tkinter import *
+import tkinter.messagebox as msgbox
 root=Tk()
 root.geometry(f"800x600+100+100")
 root.minsize(200,200)
 root.title("Notepad")
 root.overrideredirect(True)
 # Dark mode colour
-root.config(background="#1e1e1e")
+rootbgcolour="#1e1e1e"
+root.config(background=rootbgcolour)
 # Foreground colour
 fgColour='#c0c8c6'
 
 '''Making a custom title bar because background of titlebar cannot be changed in tkinter
-and without changing the background, dark mode doesn't really look good'''
+and without changing the background, dark mode doesn't really look good
+MOST CHALLENGING PART'''
 #TODO: Show icon in taskbar at all times
 # Function for fullscreen
 fullscreenTurn=True
@@ -77,6 +80,85 @@ def moveWindow(event):
 titlebar.bind('<B1-Motion>',moveWindow)
 
 '''----------Title Bar Done------'''
+
+'''Menu'''
+# This does not work, can't change background position or location of the menubar
+'''
+# Functions
+def new():
+    pass
+def open():
+    pass
+def save():
+    pass
+def saveas():
+    pass
+
+mainMenu=Menu(root,bg=titlebg)
+#File Menu
+fileMenu=Menu(mainMenu,tearoff=False,background=bgcolour)
+fileMenu.add_command(label="New",command=new)
+fileMenu.add_command(label="Open",command=open)
+fileMenu.add_command(label="Save",command=save)
+fileMenu.add_command(label="Save As",command=saveas)
+fileMenu.add_separator()
+fileMenu.add_command(label="Exit",command=root.destroy)
+mainMenu.add_cascade(label="File", menu=fileMenu)
+
+root.config(menu=mainMenu)
+'''
+
+# Creating a menu from scratch
+
+#Functions
+
+#File Menu Functions
+menubgcolour='#414040'
+submenubgcolour='#4E4B4B'
+
+def file():
+    fileMenu=Frame(root,bg=menubgcolour,bd=1,relief=SUNKEN)
+    fileMenu.pack(side=TOP,fill=X)
+    
+    Button(fileMenu,text="New",command=new,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
+    Button(fileMenu,text="Save",command=save,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
+    Button(fileMenu,text="Open",command=open,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
+    
+    Button(fileMenu,text="X",command=fileMenu.pack_forget,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=RIGHT,pady=2) #To close the extra menu
+#Sub functions
+def save():
+    pass
+
+def open():
+    pass
+
+def new():
+    pass
+
+# Help menu functions
+def help():
+    helpMenu=Frame(root,bg=menubgcolour,bd=1,relief=SUNKEN)
+    helpMenu.pack(side=TOP,fill=X)
+
+    Button(helpMenu,text="About",command=about,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
+
+    Button(helpMenu,text="X",command=helpMenu.pack_forget,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=RIGHT,pady=2) #To close the extra menu
+
+#Sub functions
+def about():
+    msgbox.showinfo("About","Made by Bhavya Gautam")
+
+
+
+menuBar=Frame(root,bg=menubgcolour,relief=FLAT)
+menuBar.pack(side=TOP,fill=X)
+
+
+
+# File Button
+Button(menuBar,text="File",command=file,bg=menubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
+# Help Button
+Button(menuBar,text="Help",command=help,bg=menubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
 
 
 root.mainloop()
