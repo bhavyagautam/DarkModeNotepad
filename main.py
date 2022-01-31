@@ -1,7 +1,8 @@
 from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog #for opening and saving files
+from tkinter import ttk #for resizing the window
 import tkinter.messagebox as msgbox
-import os
+import os #to get cwd for initial position of saving and opening window
 root=Tk()
 root.geometry(f"800x600+100+100")
 root.minsize(200,200)
@@ -157,7 +158,7 @@ def save():
         val=getText()
         with open(raw_filename,'w') as f:
             f.write(val)
-    
+
 
 #Function to save as new file
 def saveas():
@@ -215,9 +216,25 @@ Button(menuBar,text="Help",command=help,bg=menubgcolour,fg=fgColour,relief=FLAT)
 
 '''---------    Menubar Done    ------- '''
 
+'''Creating Scroll Bar and it's frames'''
+yscrollframe=Frame(root)
+style=ttk.Style(root)
+style.configure("My.Horizontal.TScrollbar", troughcolor="red")
+yscrollframe.pack(side=RIGHT,anchor=SE,fill=Y)
+yscroll=Scrollbar(yscrollframe,troughcolor="yellow")
+
+
+#Resizing window widget
+
+style.theme_use('classic')
+style.configure('TLabel', background=titlebg,width=2)
+sizegrip=ttk.Sizegrip(yscrollframe, style='TLabel')
+sizegrip.pack(side=BOTTOM,anchor=SE)
+
+
 '''Text'''
 textFrame=Frame(root)
-text=Text(textFrame,fg=fgColour,bg=rootbgcolour,insertbackground=fgColour) #insertbackgorund: cursor colour
+text=Text(textFrame,fg=fgColour,bg=rootbgcolour,insertbackground=fgColour,yscrollcommand=yscroll.set) #insertbackgorund: cursor colour
 text.pack(side=TOP,fill=BOTH,expand=True)
 textFrame.pack(side=BOTTOM,fill=BOTH,expand=True)
 
@@ -228,6 +245,11 @@ def getText():
 def addText(val):
     text.insert(END,val)
 
+'''------ TEXT DONE ------'''
 
+# Continuing scrollbar
+yscroll.config(command=text.yview)
+yscroll.pack(side=RIGHT,fill=Y)
+'''------Scrollbar Done--------'''
 
 root.mainloop()
