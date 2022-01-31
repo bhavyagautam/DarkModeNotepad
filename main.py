@@ -7,6 +7,23 @@ import ctypes
 ctypes.windll.shcore.SetProcessDpiAwareness(True) # Makes the tkinter window not look like it's 480p
 
 root=Tk()
+
+# Function to toggle between taskbar icon and normal window
+def toggle(event):
+    if event.type == EventType.Map:
+        root.deiconify()
+    else:
+        root.withdraw()
+
+# create the "invisible" toplevel
+top = Toplevel(root)
+top.geometry('0x0+10000+10000') # make it not visible
+top.title('Notepad') # title for the process in task manager
+top.protocol('WM_DELETE_WINDOW', root.destroy) # close root window if toplevel is closed
+top.bind("<Map>", toggle)
+top.bind("<Unmap>", toggle)
+
+
 '''Made geometry according to screen size because if it was too low, the file menubar would not show up.
 So now by default the window size is big enough to show it'''
 screen_width = root.winfo_screenwidth()//2
@@ -46,24 +63,23 @@ def fullscreen():
         root.overrideredirect(True)
         fullscreenTurn=True
 
+'''Using toggle function insted
+That retains the icon in taskbar, this method doesn't'''
 # Function to minimize to taskbar
-minimized=False
-minimizeTurn=False 
-def toTaskbar():
-    root.overrideredirect(False)
-    root.iconify()
-    print("to taskbar ran")
-    global minimized
-    minimized=True
+# minimized=False
+# minimizeTurn=False 
+# def toTaskbar():
+#     top.iconify()
 
-def backFromTaskbar(event):
-    global minimized,minimizeTurn
-    root.update_idletasks()
-    if(minimized and minimizeTurn):
-        root.overrideredirect(True)
-        minimized=False
-    else:
-        minimizeTurn=True
+
+# def backFromTaskbar(event):
+#     global minimized,minimizeTurn
+#     root.update_idletasks()
+#     if(minimized and minimizeTurn):
+#         root.overrideredirect(True)
+#         minimized=False
+#     else:
+#         minimizeTurn=True
     
 
 #Making the titlebar
@@ -76,12 +92,12 @@ titleLabel.pack(side=LEFT)
 '''Need to bind it to titlebar
 First tried binding it to root, but that was giving multiple instances of map for every time it was changed
 Using titlebar only invokes map once when changed'''
-titlebar.bind('<Map>',backFromTaskbar)
+# titlebar.bind('<Map>',backFromTaskbar)
 
 # Basic button functionality for the title bar
 Button(titlebar,command=root.destroy,bg=titlebg,text="X",fg=fgColour,width=3,relief=FLAT,font='Helvetica 10 bold').pack(side=RIGHT)
 Button(titlebar,command=fullscreen,bg=titlebg,text="O",fg=fgColour,width=3,relief=FLAT,font='Helvetica 10 bold').pack(side=RIGHT)
-Button(titlebar,command=toTaskbar,bg=titlebg,text="---",fg=fgColour,width=3,relief=FLAT,font='Helvetica 10 bold').pack(side=RIGHT)
+Button(titlebar,command=top.iconify,bg=titlebg,text="---",fg=fgColour,width=3,relief=FLAT,font='Helvetica 10 bold').pack(side=RIGHT)
 
 # Window Movement
 
