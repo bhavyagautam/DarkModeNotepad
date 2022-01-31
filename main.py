@@ -7,7 +7,12 @@ import ctypes
 ctypes.windll.shcore.SetProcessDpiAwareness(True) # Makes the tkinter window not look like it's 480p
 
 root=Tk()
-root.geometry(f"800x600+100+100")
+'''Made geometry according to screen size because if it was too low, the file menubar would not show up.
+So now by default the window size is big enough to show it'''
+screen_width = root.winfo_screenwidth()//2
+screen_height = root.winfo_screenheight()//2
+root.geometry(f"{screen_width}x{screen_height}+200+200")
+
 root.minsize(200,200)
 root.title("Notepad")
 root.overrideredirect(True)
