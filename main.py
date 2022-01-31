@@ -84,12 +84,22 @@ Button(titlebar,command=fullscreen,bg=titlebg,text="O",fg=fgColour,width=3,relie
 Button(titlebar,command=toTaskbar,bg=titlebg,text="---",fg=fgColour,width=3,relief=FLAT,font='Helvetica 10 bold').pack(side=RIGHT)
 
 # Window Movement
-# TODO: Make the window move from the point where I click it from and not the edge
+
 def moveWindow(event):
-    root.geometry(f'+{event.x_root}+{event.y_root}')
+    x = root.winfo_pointerx() - root.offsetx
+    y = root.winfo_pointery() - root.offsety
+    root.geometry(f'+{x}+{y}')
+
+# Coordinates where the titlebar is clicked
+def click(event):
+    root.offsetx=event.x
+    root.offsety=event.y
 
 titlebar.bind('<B1-Motion>',moveWindow)
-
+titlebar.bind('<Button-1>',click)
+#Binding to label otherwise the window didn't move when cursor was over the label
+titleLabel.bind('<B1-Motion>',moveWindow)
+titleLabel.bind('<Button-1>',click)
 '''----------Title Bar Done------'''
 
 '''Menu'''
