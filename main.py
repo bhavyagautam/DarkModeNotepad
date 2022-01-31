@@ -3,6 +3,9 @@ from tkinter import filedialog #for opening and saving files
 from tkinter import ttk #for resizing the window
 import tkinter.messagebox as msgbox
 import os #to get cwd for initial position of saving and opening window
+import ctypes
+ctypes.windll.shcore.SetProcessDpiAwareness(True) # Makes the tkinter window not look like it's 480p
+
 root=Tk()
 root.geometry(f"800x600+100+100")
 root.minsize(200,200)
