@@ -64,7 +64,8 @@ def fullscreen():
         fullscreenTurn=True
 
 '''Using toggle function insted
-That retains the icon in taskbar, this method doesn't'''
+That retains the icon in taskbar even when the window is use
+This method only retains it when the window is iconified and not when it's in use'''
 # Function to minimize to taskbar
 # minimized=False
 # minimizeTurn=False 
