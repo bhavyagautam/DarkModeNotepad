@@ -124,10 +124,14 @@ def file():
     
     Button(fileMenu,text="New",command=new,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
     Button(fileMenu,text="Save",command=save,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
+    Button(fileMenu,text="Save As",command=saveas,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
     Button(fileMenu,text="Open",command=openFunction,bg=submenubgcolour,fg=fgColour,relief=FLAT).pack(side=LEFT,pady=2)
     
     Button(fileMenu,text="X",command=fileMenu.pack_forget,bg=submenubgcolour,fg=fgColour,relief=FLAT,width=3).pack(side=RIGHT,pady=2,padx=2) #To close the extra menu
 #Sub functions
+
+global filename #To store the current filename
+filename=''
 # To raw function to open the files with absolute path
 def to_raw(string):
     newstr=''
@@ -145,26 +149,44 @@ def textDelete():
 
 #Function to save the file
 def save():
-    filename=filedialog.askopenfilename(initialdir=os.getcwd(),title="Save",filetypes=(('Text Files','*.txt*'),("All Files", "*.*")))
+    global filename
+    if filename=='':    #To check if the file hasn't been stored already
+        saveas()
+    else:
+        raw_filename=to_raw(filename)   #Updating contents of the file
+        val=getText()
+        with open(raw_filename,'w') as f:
+            f.write(val)
+    
+
+#Function to save as new file
+def saveas():
+    global filename
+    filename=filedialog.asksaveasfilename(initialdir=os.getcwd(),title="Save As",filetypes=(('Text Files','*.txt*'),("All Files", "*.*")))
     raw_filename=to_raw(filename)
     val=getText()
     with open(raw_filename,'w') as f:
         f.write(val)
-
+    titleLabel.config(text=f"Notepad\t{filename}")
 
 # Function to open files
 def openFunction():
+    global filename
     filename=filedialog.askopenfilename(initialdir=os.getcwd(),title="Open",filetypes=(('Text Files','*.txt*'),("All Files", "*.*")))
     raw_filename=to_raw(filename)
     with open(raw_filename,'r') as f:
         val=f.read()
     textDelete()
     addText(val)
+    titleLabel.config(text=f"Notepad\t{filename}")
 
 
-
+# Function to create new file
 def new():
+    global filename
+    filename=''
     textDelete()
+    titleLabel.config(text=f"Notepad")
 
 # Help menu functions
 def help():
@@ -177,7 +199,7 @@ def help():
 
 #Sub functions
 def about():
-    msgbox.showinfo("About","Made by Bhavya Gautam")
+    msgbox.showinfo("About","Made by Bhavya Gautam\nhttps://github.com/bhavyagautam/DarkModeNotepad")
 
 
 
