@@ -218,14 +218,12 @@ Button(menuBar,text="Help",command=help,bg=menubgcolour,fg=fgColour,relief=FLAT)
 
 '''Creating Scroll Bar and it's frames'''
 yscrollframe=Frame(root)
-style=ttk.Style(root)
-style.configure("My.Horizontal.TScrollbar", troughcolor="red")
 yscrollframe.pack(side=RIGHT,anchor=SE,fill=Y)
-yscroll=Scrollbar(yscrollframe,troughcolor="yellow")
+yscroll=Scrollbar(yscrollframe,troughcolor=titlebg)
 
 
 #Resizing window widget
-
+style=ttk.Style(root)
 style.theme_use('classic')
 style.configure('TLabel', background=titlebg,width=2)
 sizegrip=ttk.Sizegrip(yscrollframe, style='TLabel')
